@@ -2,17 +2,26 @@ using UnityEngine;
 
 namespace UnitySensors.Sensor
 {
+    /// <summary>
+    /// Base class for all sensor classes.
+    /// </summary>
     public abstract class UnitySensor : MonoBehaviour
     {
+        /// <summary>
+        /// Operating frequency of the sensor.
+        /// </summary>
         [SerializeField]
+        [Tooltip("Operating frequency of the sensor.")]
         private float _frequency = 10.0f;
 
         private float _time;
         private float _dt;
 
+        /// <summary>
+        /// Callback function when sensor data is updated.
+        /// </summary>
         public delegate void OnSensorUpdated();
         public OnSensorUpdated onSensorUpdated;
-
 
         private float _frequency_inv;
 
@@ -44,8 +53,19 @@ namespace UnitySensors.Sensor
             OnSensorDestroy();
         }
 
+        /// <summary>
+        /// Sensor initialization function. Called at Awake().
+        /// </summary>
         protected abstract void Init();
+
+        /// <summary>
+        /// Sensor data update function. Called based on _frequency.
+        /// </summary>
         protected abstract void UpdateSensor();
+
+        /// <summary>
+        /// Called ad OnDestroy().
+        /// </summary>
         protected abstract void OnSensorDestroy();
     }
 }
