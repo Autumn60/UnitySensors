@@ -64,7 +64,7 @@ namespace UnitySensors.Sensor
         protected abstract void UpdateSensor();
 
         /// <summary>
-        /// Called ad OnDestroy().
+        /// Called at OnDestroy().
         /// </summary>
         protected abstract void OnSensorDestroy();
     }
