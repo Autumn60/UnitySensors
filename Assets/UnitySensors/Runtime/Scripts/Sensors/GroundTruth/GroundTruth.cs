@@ -7,8 +7,7 @@ namespace UnitySensors.Sensor.GroundTruth
     {
         private Transform _transform;
 
-        public Vector3 position { get => _transform.position; }
-        public Quaternion rotation { get => _transform.rotation; }
+        public Pose pose { get => new Pose(_transform.position, _transform.rotation); }
 
         protected override void Init()
         {

@@ -23,8 +23,9 @@ namespace UnitySensors.ROS.Serializer.PoseStamped
         public override PoseStampedMsg Serialize()
         {
             _msg.header = _header.Serialize();
-            _msg.pose.position = sensor.transform.position.To<FLU>();
-            _msg.pose.orientation = sensor.transform.rotation.To<FLU>();
+            Pose pose = sensor.pose;
+            _msg.pose.position = pose.position.To<FLU>();
+            _msg.pose.orientation = pose.rotation.To<FLU>();
             return _msg;
         }
     }
