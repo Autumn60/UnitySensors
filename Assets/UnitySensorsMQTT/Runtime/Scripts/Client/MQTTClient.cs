@@ -73,7 +73,7 @@ namespace UnitySensors.MQTT.Client
 
         public async void Publish(PayloadWithTag payload)
         {
-            MqttApplicationMessage message = new MqttApplicationMessageBuilder().WithPayload(payload.ToString()).Build();
+            MqttApplicationMessage message = new MqttApplicationMessageBuilder().WithTopic(_topic).WithPayload(payload.ToString()).Build();
             
             try
             {
