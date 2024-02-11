@@ -1,8 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 
 using UnityEngine;
@@ -14,6 +11,7 @@ using MQTTnet.Client.Connecting;
 using MQTTnet.Client.Receiving;
 using MQTTnet.Client.Disconnecting;
 
+using UnitySensors.Attribute;
 using UnitySensors.MQTT.Message;
 
 namespace UnitySensors.MQTT.Client
@@ -26,6 +24,9 @@ namespace UnitySensors.MQTT.Client
         [SerializeField]
         private string _topic = "";
 
+        [SerializeField, ReadOnly]
+        private bool _isConnected;
+
         IMqttClient _client;
         IMqttClientOptions _options;
 
@@ -36,6 +37,8 @@ namespace UnitySensors.MQTT.Client
         {
             _client = new MqttFactory().CreateMqttClient();
             _options = new MqttClientOptionsBuilder().WithTcpServer(_ip, 1883).Build();
+
+            _isConnected = false;
         }
 
         private async void Start()
@@ -56,6 +59,7 @@ namespace UnitySensors.MQTT.Client
 
         private async void OnConnected(MqttClientConnectedEventArgs args)
         {
+            _isConnected = true;
             TopicFilterBuilder builder = new TopicFilterBuilder();
             await _client.SubscribeAsync(builder.WithTopic(_topic).Build());
         }
@@ -83,6 +87,7 @@ namespace UnitySensors.MQTT.Client
 
         private async void OnDisconnected(MqttClientDisconnectedEventArgs args)
         {
+            _isConnected = false;
             if (_client == null) return;
 
             await Task.Delay(TimeSpan.FromSeconds(5));
