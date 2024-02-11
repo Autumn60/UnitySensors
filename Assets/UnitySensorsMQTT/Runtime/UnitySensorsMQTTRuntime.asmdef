@@ -2,6 +2,7 @@
     "name": "UnitySensorsMQTTRuntime",
     "rootNamespace": "",
     "references": [
+        "GUID:abd5eea1899d56043b873b762a591958",
         "GUID:e9a473e6ad03eae4a89800bf81bd1594"
     ],
     "includePlatforms": [],
