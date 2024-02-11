@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using UnitySensors.Attribute;
 using UnitySensors.MQTT.Message;
 using UnitySensors.MQTT.Client;
 using UnitySensors.MQTT.Deserializer;
@@ -14,6 +15,9 @@ namespace UnitySensors.MQTT.Subscriber
         private MQTTClient _client;
         [SerializeField]
         protected string _tag;
+
+        [SerializeField, ReadOnly]
+        private string _subscribedPayload;
 
         private T _deserializer;
 
@@ -29,6 +33,7 @@ namespace UnitySensors.MQTT.Subscriber
         private void OnSubscribedRaw(PayloadWithTag payloadWithTag)
         {
             if (payloadWithTag.tag != _tag) return;
+            _subscribedPayload = payloadWithTag.payload;
             if (onSubscribed != null)
                 onSubscribed.Invoke(_deserializer.Deserialize(payloadWithTag.payload));
         }

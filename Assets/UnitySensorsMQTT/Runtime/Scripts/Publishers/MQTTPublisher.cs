@@ -9,7 +9,7 @@ using UnitySensors.MQTT.Serializer;
 
 namespace UnitySensors.MQTT.Publisher
 {
-    public abstract class MQTTPublisher<T, TT> : MonoBehaviour where T : UnitySensor where TT : MQTTSerializer<T>
+    public abstract class MQTTPublisher<T, TT> : MonoBehaviour where T : UnitySensor where TT : MQTTSerializer<T>, new()
     {
         [SerializeField]
         private MQTTClient _client;
@@ -33,6 +33,7 @@ namespace UnitySensors.MQTT.Publisher
             _dt = 0.0f;
             _frequency_inv = 1.0f / _frequency;
 
+            _serializer = new TT();
             _serializer.Init(GetComponent<T>());
         }
 
