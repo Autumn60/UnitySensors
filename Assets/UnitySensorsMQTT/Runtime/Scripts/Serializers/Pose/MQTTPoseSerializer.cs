@@ -1,3 +1,4 @@
+using UnityEngine;
 using UnitySensors.Data.Pose;
 using UnitySensors.Sensor;
 
@@ -7,7 +8,7 @@ namespace UnitySensors.MQTT.Serializer.Pose
     {
         public override string Serialize()
         {
-            return sensor.pose.ToString();
+            return JsonUtility.ToJson(sensor.pose);
         }
     }
 }
