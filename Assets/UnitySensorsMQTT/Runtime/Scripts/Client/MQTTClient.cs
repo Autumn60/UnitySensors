@@ -73,6 +73,7 @@ namespace UnitySensors.MQTT.Client
 
         public async void Publish(PayloadWithTag payload)
         {
+            if (!_isConnected) return;
             MqttApplicationMessage message = new MqttApplicationMessageBuilder().WithTopic(_topic).WithPayload(payload.ToString()).Build();
             
             try

@@ -65,6 +65,7 @@ namespace UnitySensors.MQTT.Server
 
         private async void Stop()
         {
+            if (!_isRunning) return;
             try
             {
                 await _server.StopAsync();
@@ -79,6 +80,7 @@ namespace UnitySensors.MQTT.Server
         {
             Stop();
             _server = null;
+            _isRunning = false;
         }
     }
 }
