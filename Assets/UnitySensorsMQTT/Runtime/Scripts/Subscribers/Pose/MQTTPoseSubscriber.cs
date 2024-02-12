@@ -4,9 +4,9 @@ using UnityEngine;
 
 using UnitySensors.MQTT.Deserializer.Pose;
 
-namespace UnitySensors.MQTT.Subscriber
+namespace UnitySensors.MQTT.Subscriber.Pose
 {
-    public class MQTTPoseSubscriber : MQTTSubscriber<MQTTPoseDeserializer, Pose>
+    public class MQTTPoseSubscriber : MQTTSubscriber<MQTTPoseDeserializer, UnityEngine.Pose>
     {
     }
 }
