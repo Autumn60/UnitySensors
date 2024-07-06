@@ -37,30 +37,27 @@ namespace UnitySensors.Sensor.IMU
         public Vector3 localVelocity { get => _transform.InverseTransformDirection(_velocity); }
         public Vector3 localAcceleration { get => _transform.InverseTransformDirection(_acceleration.normalized) * _acceleration.magnitude; }
 
-        private Vector3 _gravityDirection;
-        private float _gravityMagnitude;
-        private float _time_last;
+        private Vector3 _gravity;
+        private Quaternion _rotation_init;
 
         protected override void Init()
         {
             _transform = this.transform;
-            _gravityDirection = Physics.gravity.normalized;
-            _gravityMagnitude = Physics.gravity.magnitude;
+            _gravity = Physics.gravity;
+            _rotation_init = _transform.rotation;
         }
 
-        protected override void Update()
+        private void FixedUpdate()
         {
-            float dt = Time.deltaTime;
-
-            _position_tmp = _transform.position;
+            float dt = Time.fixedDeltaTime;
+            _position_tmp = transform.position;
             _velocity_tmp = (_position_tmp - _position_last) / dt;
-            _acceleration_tmp = (_velocity_tmp - _velocity_last) / dt;
-            _acceleration_tmp -= _transform.InverseTransformDirection(_gravityDirection) * _gravityMagnitude;
+            _acceleration_tmp = (_velocity_tmp - _velocity_last) / dt + _gravity;
 
             _rotation_tmp = _transform.rotation;
             Quaternion rotation_delta = Quaternion.Inverse(_rotation_last) * _rotation_tmp;
-            rotation_delta.ToAngleAxis(out float angle, out Vector3 axis);
-            float angularSpeed = (angle * Mathf.Deg2Rad) / dt;
+            rotation_delta.ToAngleAxis(out float angle_delta, out Vector3 axis);
+            float angularSpeed = (angle_delta * Mathf.Deg2Rad) / dt;
             _angularVelocity_tmp = axis * angularSpeed;
 
             _position_last = _position_tmp;
@@ -72,12 +69,13 @@ namespace UnitySensors.Sensor.IMU
 
         protected override void UpdateSensor()
         {
-            _position = _position_tmp;
-            _velocity = _velocity_tmp;
-            _acceleration = _acceleration_tmp;
+            Quaternion rotation_tmp_inv = Quaternion.Inverse(_rotation_tmp);
+            _position = rotation_tmp_inv * _position_tmp;
+            _velocity = rotation_tmp_inv * _velocity_tmp;
+            _acceleration = rotation_tmp_inv * _acceleration_tmp;
 
-            _rotation = _rotation_tmp;
-            _angularVelocity = _angularVelocity_tmp;
+            _rotation = Quaternion.Inverse(_rotation_init) * _rotation_tmp;
+            _angularVelocity = rotation_tmp_inv * _angularVelocity_tmp;
 
             if (onSensorUpdated != null)
                 onSensorUpdated.Invoke();
